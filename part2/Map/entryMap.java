@@ -1,4 +1,4 @@
-package java2.LabGroup2.part2.List;
+package java2.LabGroup2.part2.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -6,12 +6,17 @@ import com.google.gson.reflect.TypeToken;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
-public class entryList {
-    private List<Student> list = new ArrayList<>();
+public class entryMap {
+    private HashMap<Integer,Student> list = new HashMap();
+    public entryMap(){
+//        list.put(1,new Student(1,"minh thanh",19,10));
+//        list.put(2,new Student(2,"minh thanh",19,9));
+//        list.put(3,new Student(3,"minh thanh",19,10));
+//        list.put(4,new Student(4,"minh thanh",19,8));
+    }
+
     public void addStudent(){
         Scanner sc = new Scanner(System.in);
         System.out.println("Nhập ID :");
@@ -29,17 +34,20 @@ public class entryList {
         add(e);
     }
     public void add(Student a){
-        list.add(a);
+        Scanner sc = new Scanner(System.in);
+        System.out.println("NHập key :");
+        int key = sc.nextInt();
+        list.put(key,a);
     }
     public void loadFile() throws IOException {
         Gson gson = new Gson();
-        FileReader reader = new FileReader("student13062023.json");
-        list = gson.fromJson(reader,new TypeToken<List<Student>>(){}.getType());
+        FileReader reader = new FileReader("student13062022.json");
+        list = gson.fromJson(reader,new TypeToken<Map<Integer,Student>>(){}.getType());
         reader.close();
     }
     public void saveFile() throws IOException{
         Gson gson = new Gson();
-        FileWriter writer = new FileWriter("student13062023.json");
+        FileWriter writer = new FileWriter("student13062022.json");
         gson.toJson(list,writer);
         writer.close();
     }
@@ -59,88 +67,53 @@ public class entryList {
         displayStudent();
         System.out.println("Nhập id cần tìm");
         int id = sc.nextInt();
-        for (Student a : list){
-            if (a.getRollNumber() == id) {
-                System.out.println(a);
-            }
-        }
+        System.out.println(list.get(id));
     }
     public void displayStudent(){
-//        Collections.sort(list);
         System.out.println("=====================");
-        for (Student a : list){
-            System.out.println(a);
-        }
+        list.forEach((key,value) -> System.out.println("key = "+ key + "value = "+ value));
         System.out.println("=====================");
     }
     public void deleteStudent(){
         Scanner sc = new Scanner(System.in);
         displayStudent();
         System.out.println("nhập vị trí cần xóa");
-        int vitri = sc.nextInt();
-        list.remove(vitri);
+        try {
+            int vitri = sc.nextInt();
+            list.forEach((key, value) -> {
+                if (vitri == key) {
+                    list.remove(key);
+                }
+            });
+        }catch (Exception a){
+            System.out.println(a.getMessage() + "Đã xóa");
+        }
     }
     public void updateStudent(){
         Scanner sc = new Scanner(System.in);
         String namefirst;
         String namelast;
-        String name;
         int age;
         int mark;
-        System.out.println("1. đổi name\n2. đổi age\n3. đổi mark");
-        int chon = sc.nextInt();
-        switch (chon){
-            case 1:
-                System.out.println("Nhập Student có id :");
-                int id = sc.nextInt();
-                for (Student a : list) {
-                    if (a.getRollNumber() == id) {
-                        System.out.println("Student ID:" + id);
-                        System.out.println("Name : " + a.getName());
-                        System.out.println("Nhập tên mới");
-                        System.out.println("First name:");
-                        namefirst = sc.next();
-                        System.out.println("Last name:");
-                        namelast = sc.next();
-                        name = namefirst + " " + namelast;
-                        a.setName(name);
-                    }
-                }
-                break;
-            case 2:
-                System.out.println("Nhập Student có id :");
-                int id1 = sc.nextInt();
-                for (Student a : list) {
-                    if (a.getRollNumber() == id1) {
-                        System.out.println("Student ID:" + id1);
-                        System.out.println("Age : " + a.getAge());
-                        System.out.println("Nhập tuổi mới");
-                        age = sc.nextInt();
-                        a.setAge(age);
-                    }
-                }
-                break;
-            case 3:
-                System.out.println("Nhập Student có id :");
-                int id2 = sc.nextInt();
-                for (Student a : list) {
-                    if (a.getRollNumber() == id2) {
-                        System.out.println("Student ID:" + id2);
-                        System.out.println("Mark : " + a.getMark());
-                        System.out.println("Nhập tuổi mới");
-                        mark = sc.nextInt();
-                        a.setMark(mark);
-                    }
-                }
-                break;
-            default:
-                System.out.println("Nothing happen??");
-                break;
-        }
+        System.out.println("Nhập Student có key :");
+        int key = sc.nextInt();
+        System.out.println("Thông tin ban đầu :");
+        list.get(key);
+        System.out.println("Nhập id cần đổi:");
+        int rollid = sc.nextInt();
+        System.out.println("Nhập first name:");
+        namefirst = sc.next();
+        System.out.println("Nhập last name:");
+        namelast = sc.next();
+        System.out.println("Nhập tuổi cần đổi:");
+        age = sc.nextInt();
+        System.out.println("Nhập điểm cần đổi:");
+        mark = sc.nextInt();
+        String name = namefirst + " " + namelast;
+        list.put(key,new Student(rollid,name,age,mark));
     }
-
     public static void main(String[] args) throws IOException {
-        entryList entryList = new entryList();
+        entryMap entryList = new entryMap();
         Scanner sc = new Scanner(System.in);
         entryList.menu();
         while (true){

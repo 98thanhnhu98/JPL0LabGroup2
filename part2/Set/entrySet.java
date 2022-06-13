@@ -1,4 +1,4 @@
-package java2.LabGroup2.part2.List;
+package java2.LabGroup2.part2.Set;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -6,13 +6,12 @@ import com.google.gson.reflect.TypeToken;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
-public class entryList {
-    private List<Student> list = new ArrayList<>();
-    public void addStudent(){
+public class entrySet {
+    private Set<Student> list = new HashSet<>();
+
+    public void addStudent() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Nhập ID :");
         int id = sc.nextInt();
@@ -25,62 +24,73 @@ public class entryList {
         int age = sc.nextInt();
         System.out.println("Nhập điểm của bạn :");
         int mark = sc.nextInt();
-        Student e = new Student(id,name,age,mark);
+        Student e = new Student(id, name, age, mark);
         add(e);
     }
-    public void add(Student a){
+
+    public void add(Student a) {
         list.add(a);
     }
+
     public void loadFile() throws IOException {
         Gson gson = new Gson();
         FileReader reader = new FileReader("student13062023.json");
-        list = gson.fromJson(reader,new TypeToken<List<Student>>(){}.getType());
+        list = gson.fromJson(reader, new TypeToken<Set<Student>>() {
+        }.getType());
         reader.close();
     }
-    public void saveFile() throws IOException{
+
+    public void saveFile() throws IOException {
         Gson gson = new Gson();
         FileWriter writer = new FileWriter("student13062023.json");
-        gson.toJson(list,writer);
+        gson.toJson(list, writer);
         writer.close();
     }
-    public void menu (){
+
+    public void menu() {
         System.out.println("1. Add Student");
         System.out.println("2. Update a Student");
         System.out.println("3. Delete a Student");
-        System.out.println("4. Search a Student");
+//        System.out.println("4. Search a Student");
         System.out.println("5. Display All Student");
         System.out.println("6. Save to File");
         System.out.println("7. Load form File");
         System.out.println("8. Exit");
         System.out.println("Your choice :");
     }
-    public void findStudent(){
+
+    public void findStudent() {
         Scanner sc = new Scanner(System.in);
         displayStudent();
         System.out.println("Nhập id cần tìm");
         int id = sc.nextInt();
-        for (Student a : list){
+        for (Student a : list) {
             if (a.getRollNumber() == id) {
                 System.out.println(a);
             }
         }
     }
-    public void displayStudent(){
+
+    public void displayStudent() {
 //        Collections.sort(list);
         System.out.println("=====================");
-        for (Student a : list){
+        for (Student a : list) {
             System.out.println(a);
         }
         System.out.println("=====================");
     }
-    public void deleteStudent(){
+    public void deleteStudent() {
         Scanner sc = new Scanner(System.in);
         displayStudent();
         System.out.println("nhập vị trí cần xóa");
         int vitri = sc.nextInt();
-        list.remove(vitri);
+        try {
+            list.removeIf(i -> vitri == i.getRollNumber());
+        }catch (Exception o){
+            System.out.println(o.getMessage());
+        }
     }
-    public void updateStudent(){
+    public void updateStudent() {
         Scanner sc = new Scanner(System.in);
         String namefirst;
         String namelast;
@@ -89,7 +99,7 @@ public class entryList {
         int mark;
         System.out.println("1. đổi name\n2. đổi age\n3. đổi mark");
         int chon = sc.nextInt();
-        switch (chon){
+        switch (chon) {
             case 1:
                 System.out.println("Nhập Student có id :");
                 int id = sc.nextInt();
@@ -140,12 +150,12 @@ public class entryList {
     }
 
     public static void main(String[] args) throws IOException {
-        entryList entryList = new entryList();
+        entrySet entryList = new entrySet();
         Scanner sc = new Scanner(System.in);
         entryList.menu();
-        while (true){
+        while (true) {
             int chon = sc.nextInt();
-            switch (chon){
+            switch (chon) {
                 case 1:
                     entryList.addStudent();
                     entryList.menu();
@@ -159,7 +169,8 @@ public class entryList {
                     entryList.menu();
                     break;
                 case 4:
-                    entryList.findStudent();
+                    System.out.println("không thể tìm kiếm");
+//                    entryList.findStudent();
                     entryList.menu();
                     break;
                 case 5:

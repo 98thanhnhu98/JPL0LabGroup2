@@ -6,12 +6,14 @@ import com.google.gson.reflect.TypeToken;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
-public class entryList {
-    private List<Student> list = new ArrayList<>();
+public class entryLinkedList {
+    private List<Student> list = new LinkedList<>();
+
+
     public void addStudent(){
         Scanner sc = new Scanner(System.in);
         System.out.println("Nhập ID :");
@@ -140,7 +142,7 @@ public class entryList {
     }
 
     public static void main(String[] args) throws IOException {
-        entryList entryList = new entryList();
+        entryLinkedList entryList = new entryLinkedList();
         Scanner sc = new Scanner(System.in);
         entryList.menu();
         while (true){
